@@ -1,0 +1,42 @@
+<section class="topic-shell">
+  <a class="back-link" routerLink="/">← <span>Back to the library</span></a>
+  @if (loading()) {
+    <div class="state-panel"><span class="loader"></span><p>Opening this guide…</p></div>
+  } @else if (error()) {
+    <div class="state-panel error-panel"><strong>Guide unavailable</strong><p>{{ error() }}</p><a class="button button-dark" routerLink="/">Browse all guides</a></div>
+  } @else if (topic(); as guide) {
+    <div class="article-layout">
+      <article>
+        <div class="article-heading">
+          <p class="eyebrow"><span></span>{{ guide.category }}</p>
+          <h1>{{ guide.title }}</h1>
+          <p class="summary">{{ guide.summary }}</p>
+          <div class="article-meta"><span>{{ guide.readMinutes }} minute read</span><span>·</span><span>Part of the Constitution of India</span></div>
+        </div>
+        <div class="article-body">
+          <div class="article-icon">{{ guide.icon }}</div>
+          <p class="article-lead">{{ guide.summary }}</p>
+          @for (paragraph of paragraphs; track $index) {
+            <p>{{ paragraph }}</p>
+          }
+          <aside class="note"><span>✳</span><p>This guide is for general awareness and learning. For authoritative interpretation, refer to the Constitution of India and relevant court judgments.</p></aside>
+        </div>
+        <div class="article-footer"><a routerLink="/quiz" class="button button-dark">Put your knowledge to the test <span aria-hidden="true">↗</span></a></div>
+      </article>
+      <aside class="guide-nav">
+        <p class="nav-label">IN THIS LIBRARY</p>
+        <a routerLink="/" class="library-link">All learning guides <span>↗</span></a>
+        <p class="nav-label related-label">KEEP EXPLORING</p>
+        @if (relatedError()) {
+          <p class="related-error">Related guides are temporarily unavailable.</p>
+        }
+        @for (item of topics(); track item.id) {
+          @if (item.slug !== guide.slug) {
+            <a [routerLink]="['/learn', item.slug]" class="related-link"><span>{{ item.icon }}</span>{{ item.title }}<small>↗</small></a>
+          }
+        }
+        <div class="side-quiz"><strong>Ready for a quick check?</strong><p>See how much you remember.</p><a routerLink="/quiz">Take the quiz ↗</a></div>
+      </aside>
+    </div>
+  }
+</section>

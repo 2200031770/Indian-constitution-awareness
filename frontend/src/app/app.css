@@ -1,0 +1,88 @@
+:host {
+  display: block;
+}
+
+.site-header {
+  align-items: center;
+  background: rgba(250, 249, 246, 0.94);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  height: 76px;
+  justify-content: space-between;
+  padding: 0 max(5vw, calc((100vw - 1180px) / 2));
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.brand {
+  align-items: center;
+  color: var(--ink);
+  display: flex;
+  gap: 11px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  align-items: center;
+  background: var(--saffron);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  font-family: var(--serif);
+  font-size: 23px;
+  height: 39px;
+  justify-content: center;
+  width: 39px;
+}
+
+.brand-copy { display: grid; gap: 2px; }
+.brand-copy strong, .footer-brand { font-family: var(--serif); font-size: 19px; }
+.brand-copy small { color: var(--muted); font-size: 8px; letter-spacing: .15em; }
+
+nav { display: flex; gap: 34px; height: 100%; }
+nav a {
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  display: flex;
+  font-size: 13px;
+  text-decoration: none;
+}
+nav a.active, nav a:hover { border-color: var(--saffron); color: var(--ink); }
+
+.header-cta {
+  background: var(--ink);
+  border-radius: 5px;
+  color: white;
+  font-size: 12px;
+  padding: 11px 15px;
+  text-decoration: none;
+}
+.header-cta span { color: #efaa70; margin-left: 10px; }
+
+main { min-height: calc(100vh - 190px); }
+
+.site-footer {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  font-size: 11px;
+  gap: 22px;
+  justify-content: space-between;
+  margin-top: 70px;
+  padding: 24px max(5vw, calc((100vw - 1180px) / 2));
+}
+.footer-brand { color: var(--ink); text-decoration: none; }
+.site-footer p { margin: 0; }
+
+@media (max-width: 650px) {
+  .site-header { height: 66px; padding: 0 18px; }
+  .brand-copy small { display: none; }
+  .brand-copy strong { font-size: 17px; }
+  nav { gap: 14px; }
+  nav a { font-size: 11px; }
+  .header-cta { display: none; }
+  .site-footer { align-items: flex-start; flex-direction: column; gap: 8px; padding: 22px; }
+}

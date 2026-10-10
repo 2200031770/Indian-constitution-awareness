@@ -1,0 +1,74 @@
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow"><span></span> A living document. A shared promise.</p>
+    <h1>Know the<br><em>Constitution.</em></h1>
+    <p class="intro">The Constitution shapes our everyday lives. Explore its ideas, understand your rights, and discover the framework we share.</p>
+    <div class="hero-actions">
+      <a class="button button-dark" href="#topics">Explore the library <span aria-hidden="true">↓</span></a>
+      <a class="text-link" routerLink="/quiz">Test what you know <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="hero-note"><span class="note-rule"></span><span>Made for curious citizens, at every stage of the journey.</span></div>
+  </div>
+  <div class="hero-art" aria-label="Illustration of the Indian Constitution">
+    <div class="art-circle circle-outer"></div>
+    <div class="art-circle circle-inner"></div>
+    <div class="book">
+      <div class="book-emblem">✳</div>
+      <span>WE, THE<br>PEOPLE OF INDIA</span>
+      <small>CONSTITUTION<br>OF INDIA</small>
+      <i></i>
+    </div>
+    <div class="art-caption"><span>01 / 06</span><span>A framework for us all</span></div>
+    <div class="art-decoration">§</div>
+  </div>
+</section>
+
+<section class="principles" aria-label="Constitutional values">
+  <div><span class="principle-mark">01</span><strong>Justice</strong><small>Social · economic · political</small></div>
+  <div><span class="principle-mark">02</span><strong>Liberty</strong><small>Thought · expression · belief</small></div>
+  <div><span class="principle-mark">03</span><strong>Equality</strong><small>Of status and opportunity</small></div>
+  <div><span class="principle-mark">04</span><strong>Fraternity</strong><small>Dignity · unity · integrity</small></div>
+</section>
+
+<section class="library section-wrap" id="topics">
+  <div class="section-heading">
+    <div><p class="eyebrow"><span></span> The learning library</p><h2>Big ideas, made <em>clear.</em></h2></div>
+    <p>Start anywhere. Each guide gives you the essentials, without the legalese.</p>
+  </div>
+  <label class="search-box">
+    <span aria-hidden="true">⌕</span>
+    <input #searchInput type="search" placeholder="Search topics, rights, institutions..." aria-label="Search learning topics" (input)="setSearch(searchInput.value)">
+    <kbd>⌕</kbd>
+  </label>
+  <div class="filters" aria-label="Filter topics by category">
+    @for (item of categories; track item) {
+      <button type="button" [class.selected]="category() === item" [attr.aria-pressed]="category() === item" (click)="setCategory(item)">{{ item }}</button>
+    }
+  </div>
+  @if (loading()) {
+    <div class="state-panel"><span class="loader"></span><p>Opening the learning library…</p></div>
+  } @else if (error()) {
+    <div class="state-panel error-panel"><strong>We couldn’t load the guides.</strong><p>{{ error() }}</p><button type="button" class="button button-dark" (click)="loadTopics()">Try again</button></div>
+  } @else if (visibleTopics.length === 0) {
+    <div class="state-panel"><strong>No guides match that search.</strong><p>Try another phrase or choose a different topic area.</p></div>
+  } @else {
+    <div class="topic-grid">
+      @for (topic of visibleTopics; track topic.id; let index = $index) {
+        <a class="topic-card" [class.featured]="topic.featured" [routerLink]="['/learn', topic.slug]">
+          <div class="card-top"><span class="card-icon">{{ topic.icon }}</span><span class="card-number">{{ (index + 1).toString().padStart(2, '0') }}</span></div>
+          <p class="card-category">{{ topic.category }}</p>
+          <h3>{{ topic.title }}</h3>
+          <p class="card-summary">{{ topic.summary }}</p>
+          <div class="card-bottom"><span>{{ topic.readMinutes }} min read</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+        </a>
+      }
+    </div>
+  }
+  <div class="library-foot"><span>Showing {{ visibleTopics.length }} of {{ topics().length }} guides</span><span>Thoughtfully written. Open to everyone.</span></div>
+</section>
+
+<section class="quiz-banner">
+  <div class="quiz-stamp" aria-hidden="true"><span>THE</span><strong>QUICK<br>CHECK</strong><i>✳</i></div>
+  <div><p class="eyebrow">A little knowledge goes a long way</p><h2>How well do you know<br>your Constitution?</h2><p>Eight questions. A few minutes. A fresh perspective.</p></div>
+  <a routerLink="/quiz" class="button button-light">Take the quiz <span aria-hidden="true">↗</span></a>
+</section>

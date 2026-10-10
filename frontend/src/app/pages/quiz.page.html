@@ -1,0 +1,64 @@
+<section class="quiz-page">
+  <a class="back-link" href="/#topics">← <span>Back to the learning library</span></a>
+  @if (loading()) {
+    <div class="state-panel"><span class="loader"></span><p>Preparing your knowledge check…</p></div>
+  } @else if (error() && questions().length === 0) {
+    <div class="state-panel error-panel"><strong>The quiz is unavailable.</strong><p>{{ error() }}</p><button type="button" class="button button-dark" (click)="loadQuestions()">Try again</button></div>
+  } @else if (result(); as score) {
+    <div class="result-shell">
+      <div class="result-head">
+        <span class="result-mark">{{ score.percentage >= 70 ? '✳' : '↗' }}</span>
+        <p class="eyebrow">{{ score.percentage >= 70 ? 'Well explored' : 'Every question is a place to start' }}</p>
+        <h1>{{ score.percentage >= 70 ? 'A thoughtful citizen.' : 'Keep discovering.' }}</h1>
+        <p class="result-copy">You got <strong>{{ score.score }} out of {{ score.total }}</strong> questions right.</p>
+        <div class="score-ring"><strong>{{ score.percentage }}<small>%</small></strong><span>YOUR SCORE</span></div>
+        <button type="button" class="button button-dark" (click)="restart()">Try again <span aria-hidden="true">↻</span></button>
+      </div>
+      <div class="answer-review">
+        <div class="review-heading"><p class="eyebrow">Take a closer look</p><h2>Every answer is a chance to learn.</h2></div>
+        @for (item of score.results; track item.questionId; let index = $index) {
+          <article class="review-item" [class.correct]="item.correct">
+            <div class="review-number">{{ (index + 1).toString().padStart(2, '0') }}</div>
+            <div class="review-content">
+              <h3>{{ item.prompt }}</h3>
+              <p class="your-answer">Your answer: <strong>{{ item.selectedOption ?? 'Not answered' }}</strong></p>
+              @if (!item.correct) { <p class="right-answer">Correct answer: <strong>{{ item.correctOption }} · {{ item.correctAnswer }}</strong></p> }
+              <p class="explanation">{{ item.explanation }}</p>
+            </div>
+            <span class="status-mark" [attr.aria-label]="item.correct ? 'Correct' : 'Review this answer'">{{ item.correct ? '✓' : '↗' }}</span>
+          </article>
+        }
+      </div>
+    </div>
+  } @else if (currentQuestion; as question) {
+    <div class="quiz-intro">
+      <div><p class="eyebrow"><span></span> A moment to reflect</p><h1>The Constitution<br><em>quick check.</em></h1></div>
+      <p>Eight questions to help the ideas stick. Take your time — it’s about learning, not rushing.</p>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-progress">
+        <div class="progress-label"><span>QUESTION {{ (currentIndex() + 1).toString().padStart(2, '0') }} <span class="of-total">/ {{ questions().length.toString().padStart(2, '0') }}</span></span><span>{{ question.topicTitle }}</span></div>
+        <div class="progress-track"><span [style.width.%]="((currentIndex() + 1) / questions().length) * 100"></span></div>
+      </div>
+      <h2>{{ question.prompt }}</h2>
+      <div class="options" role="radiogroup" [attr.aria-label]="question.prompt">
+        @for (option of question.options; track option.id) {
+          <button type="button" class="option" [class.chosen]="selectedOption === option.id" role="radio" [attr.aria-checked]="selectedOption === option.id" (click)="selectOption(option.id)">
+            <span class="option-letter">{{ option.id }}</span><span>{{ option.text }}</span><span class="option-check">{{ selectedOption === option.id ? '✓' : '' }}</span>
+          </button>
+        }
+      </div>
+      @if (error()) { <p class="submit-error" role="alert">{{ error() }}</p> }
+      <div class="quiz-controls">
+        <button type="button" class="previous-button" [disabled]="currentIndex() === 0" (click)="previous()">← Previous</button>
+        <button type="button" class="button button-dark" [disabled]="!selectedOption || submitting()" (click)="next()">
+          {{ submitting() ? 'Checking…' : currentIndex() === questions().length - 1 ? 'See my results' : 'Next question' }}
+          @if (!submitting()) { <span aria-hidden="true">→</span> }
+        </button>
+      </div>
+    </div>
+    <p class="quiz-reassurance">Your answers are only used to show your results. No account needed.</p>
+  } @else {
+    <div class="state-panel"><strong>The quiz is being prepared.</strong><p>There are no questions available right now.</p></div>
+  }
+</section>
